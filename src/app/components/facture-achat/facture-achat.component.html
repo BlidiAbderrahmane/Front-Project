@@ -1,0 +1,59 @@
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title" style="background-color: #2eba6a;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2><b>Ajouter Facture</b></h2>   
+                </div>
+            </div>
+        </div><br>
+       
+        <form  [formGroup]="newFactureFormGroup" (ngSubmit)="handleSaveCommande()" class="ffp col-sm-8 rounded-3" style="background-color: #B6D0E2;">
+                <br>
+                <div class="form-row">
+                    <div class="col-auto">
+                        <label for="date" class="col-form-label">Date :</label>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="text" formControlName="dateFdateourni" id="date" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label for="fournisseur"  class="col-form-label">Fournisseur :</label>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <select class="form-select" formControlName="fournisseur" aria-label="Default select example" required>
+                                <option selected>Choisir un fournisseur :</option>
+                                <option *ngFor="let f of fournisseurs | async" [ngValue]="f">{{f.nom_fournisseur}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> <br>  
+
+                <div class="form-row ">
+                    <div class="col-auto "> 
+                        <label for="tht" class="col-form-label">Total HT:</label>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="text" formControlName="total_ht" id="tht" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <label for="ttva" class="col-form-label">Total TVA :</label>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <input type="text" formControlName="total_tva" id="ttva" class="form-control" required>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                    <input type="submit" class="btn btn-success" value="Ajouter">
+                </div>
+        </form>
+    </div>
+</div>

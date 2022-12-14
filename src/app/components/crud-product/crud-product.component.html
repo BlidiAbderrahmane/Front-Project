@@ -1,0 +1,270 @@
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title" style="background-color: #2eba6a;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Gérer <b>Produits</b></h2>
+                </div>
+                <div class="col-sm-6">
+                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i
+                            class="material-icons">&#xE147;</i> <span>Ajouter un produit</span></a>
+                </div>
+            </div>
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="col-auto">
+                    <label for="libelle" class="col-form-label">Libellé</label>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="text" id="libelle" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <label for="fournisseur" class="col-form-label">Fournisseur</label>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="text" id="fournisseur" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <label for="marque" class="col-form-label">Marque</label>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="text" id="marque" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <label for="categorie" class="col-form-label">Catégorie</label>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="text" id="categorie" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto ">
+                    <button type="button" class="btn btn-outline-success">Lister</button>
+                </div>
+            </div>
+        </form>
+        <ng-container *ngIf="products" | async>
+
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Libellé</th>
+                        <th>Description</th>
+                        <th>Prix</th>
+                        <th>Date d'ajout</th>
+                        <th>Prix de livraison</th>
+                        <th>Famille</th>
+                        <th>Laboratoire</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of products | async">
+                        <td><a routerLink="/ficheProduit/{{p.id_prd}}">{{p.id_prd}}</a></td>
+                        <td>{{p.lib_prd}}</td>
+                        <td>{{p.description_prd}}</td>
+                        <td>{{p.prix_prd}}</td>
+                        <td>{{p.dateAjout_prd}}</td>
+                        <td>{{p.prix_livr}}</td>
+                        <td>{{p.famille.lib_famille}}</td>
+                        <td>{{p.laboratoire.lib_labo}}</td>
+                        <td>
+                            <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"
+                                (click)="handleDeleteProduct(p.id_prd)"><i class="material-icons"
+                                    data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+
+<div id="addEmployeeModal" class="modal fade col-sm-10">
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+            <form [formGroup]="newProductFormGroup" (ngSubmit)="handleSaveProduct()">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ajouter Produit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>ID</label>
+                                <input type="text" formControlName="id_prd" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Libellé</label>
+                                <input type="text" formControlName="lib_prd" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" formControlName="description_prd" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Prix</label>
+                                <input type="email" formControlName="prix_prd" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Prix de livraison</label>
+                                <input type="text" formControlName="prix_livr" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date d'ajout</label>
+                        <input type="text" formControlName="dateAjout_prd" class="form-control" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-auto">
+                            <label for="famille" class="col-form-label">Famille :</label>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <select formControlName="famille" class="form-select" id="famille"
+                                    aria-label="Default select example">
+                                    <option selected>Choisir une famille :</option>
+                                    <option *ngFor="let f of familles | async" [ngValue]="f">{{f.lib_famille}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-autok">
+                            <label for="laboratoire" class="col-form-label">Laboratoire :</label>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <select formControlName="laboratoire" class="form-select" id="laboratoire"
+                                    aria-label="Default select example" required>
+                                    <option selected>Choisir un laboratoire :</option>
+                                    <option *ngFor="let l of laboratoires | async" [ngValue]="l">{{l.lib_labo}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                    <input type="submit" [disabled]="!newProductFormGroup.valid" class="btn btn-success"
+                        value="Ajouter">
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editEmployeeModal" class="modal fade col-sm-10">
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Modifier Produit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>ID</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Libellé</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Prix</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Prix de livraison</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date d'ajout</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Famille</label>
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Choisir une famille :</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Laboratoire</label>
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Choisir un laboratoire :</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                    <input type="submit" class="btn btn-info" value="Modifier">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
